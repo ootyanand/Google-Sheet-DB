@@ -1,3 +1,15 @@
+# How to use it...
+
+Well basically we got three jar files...
+
+**gapi.jar** - To get google Credentials.
+
+**gsheet.jar** - To access google sheet functionalities.
+
+**gdb.jar** - A wrapper around **gsheet.jar** to treat google sheet like a database.
+
+All these jar files can be found in the release folder of the respective projects.
+
 ## Obtaining google Credentials using **gapi.jar**
 First follow [this](https://developers.google.com/sheets/api/quickstart/java) instructions to create and download a **_client_secret.json_** file for your account. This file is necessary to access your google drive files from any application.
 

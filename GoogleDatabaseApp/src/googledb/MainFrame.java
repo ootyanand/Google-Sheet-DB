@@ -9,9 +9,11 @@ package googledb;
 import static java.awt.event.InputEvent.*;
 import static java.awt.event.KeyEvent.*;
 import java.awt.BorderLayout;
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -83,8 +85,10 @@ public class MainFrame extends javax.swing.JFrame{
         toolBarMain.setFloatable(false);
         toolBarMain.setRollover(true);
         toolBarMain.add(createButton(CI_OPEN_DB));
-        toolBarMain.add(new javax.swing.Box.Filler(new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5)));
         toolBarMain.add(createButton(CI_CREATE_DB));
+        toolBarMain.add(new javax.swing.Box.Filler(new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5)));
+        toolBarMain.add(createButton(CI_OPEN_IN_BROWSER));
+        toolBarMain.add(new javax.swing.Box.Filler(new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5), new java.awt.Dimension(5, 5)));
         toolBarMain.add(createButton(CI_ADD_RECORD));
         toolBarMain.add(createButton(CI_EDIT_RECORD));
         toolBarMain.add(createButton(CI_DELETE_RECORD));
@@ -104,6 +108,7 @@ public class MainFrame extends javax.swing.JFrame{
         menuFile.add(createMenuItem(CI_CREATE_DB));
         menuFile.addSeparator();
         menuFile.add(createMenuItem(CI_DB_PROPERTY));
+        menuFile.add(createMenuItem(CI_OPEN_IN_BROWSER));
         menuFile.addSeparator();
         menuFile.add(createMenuItem(CI_CREDENTIALS));
         menuFile.addSeparator();
@@ -175,7 +180,29 @@ public class MainFrame extends javax.swing.JFrame{
             case CMD_EDIT_RECORD:       onCmdEditRecord(); return;
             case CMD_DELETE_RECORD:     onCmdDeleteRecord(); return;
             case CMD_ABOUT:             onCmdAbout(); return;
+            case CMD_OPEN_IN_BROWSER:	onOpenInBrowser(); return;
         }
+    }
+    
+    public static boolean launchBrowser(String url){
+    	Desktop desktop = Desktop.isDesktopSupported() ? Desktop.getDesktop() : null;
+	    if (desktop != null && desktop.isSupported(Desktop.Action.BROWSE)) {
+	        try {
+	            desktop.browse(new URI(url));
+	            return true;
+	        } catch (Exception e) {
+	        	Logger.getLogger(MainFrame.class.getName()).log(Level.SEVERE, "Unable to launch browser: " + url, e);
+	        }
+	    }
+	    return false;
+    }
+    
+    private void onOpenInBrowser(){
+    	if(db==null || !db.isOpen()){
+            JOptionPane.showMessageDialog(this, "Please open a database first!", "Google Database", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+    	launchBrowser("https://docs.google.com/spreadsheets/d/"+db.getDatabaseId()+"/edit");
     }
     
     private void onCmdAbout(){
@@ -588,6 +615,7 @@ public class MainFrame extends javax.swing.JFrame{
     static final String CMD_EDIT_RECORD 	= "CMD_EDIT_RECORD";
     static final String CMD_DELETE_RECORD 	= "CMD_DELETE_RECORD";
     static final String CMD_ABOUT 			= "CMD_ABOUT";
+    static final String CMD_OPEN_IN_BROWSER = "CMD_OPEN_IN_BROWSER";
     
     static final CmdInfo CI_OPEN_DB 		=	new CmdInfo(CMD_OPEN_DB, 		"Open Database", 		"Open Database", 			"open-db.png", 			KeyStroke.getKeyStroke(VK_O, CTRL_MASK)); 
     static final CmdInfo CI_CREATE_DB 		=	new CmdInfo(CMD_CREATE_DB, 		"Create Database", 		"Create Database", 			"add-db.png", 			KeyStroke.getKeyStroke(VK_N, CTRL_MASK)); 
@@ -603,5 +631,6 @@ public class MainFrame extends javax.swing.JFrame{
     static final CmdInfo CI_EDIT_RECORD 	=	new CmdInfo(CMD_EDIT_RECORD, 	"Edit Record", 			"Edit Selected Record", 	"edit-record.png", 		KeyStroke.getKeyStroke(VK_E, CTRL_MASK));
     static final CmdInfo CI_DELETE_RECORD 	=	new CmdInfo(CMD_DELETE_RECORD, 	"Delete Record", 		"Delete Selected Record", 	"delete-record.png", 	KeyStroke.getKeyStroke(VK_DELETE, 0));
     static final CmdInfo CI_ABOUT 			=	new CmdInfo(CMD_ABOUT, 			"About", 				"About Google Database", 	"about.png", 			KeyStroke.getKeyStroke(VK_ENTER, CTRL_MASK));
+    static final CmdInfo CI_OPEN_IN_BROWSER =	new CmdInfo(CMD_OPEN_IN_BROWSER,"Open In Browser",		"Open In Browser", 			"open-in-browser.png", 	KeyStroke.getKeyStroke(VK_W, CTRL_MASK));
    
 }

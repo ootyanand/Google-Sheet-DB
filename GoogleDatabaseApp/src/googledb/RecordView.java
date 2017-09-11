@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
 import gdatabase.GColumn;
@@ -70,7 +71,17 @@ public class RecordView extends JPanel{
 			public void mouseEntered(MouseEvent e) {}
 			
 			@Override
-			public void mouseClicked(MouseEvent e) {}
+			public void mouseClicked(MouseEvent e) {
+				if (e.getClickCount() == 2 && !e.isConsumed()) {
+                    e.consume();
+                    SwingUtilities.invokeLater(new Runnable() {
+						@Override
+						public void run() {
+							mainFrm.createMenuItem(MainFrame.CI_EDIT_RECORD).doClick();
+						}
+					});
+				}
+			}
 		});
     }
     

@@ -248,9 +248,13 @@ public class DatabaseView extends javax.swing.JPanel {
 		if (ws.getId() == -1) { // If Root Node
 			popup.add(mainFrm.createMenuItem(MainFrame.CI_DB_PROPERTY));
 			popup.add(mainFrm.createMenuItem(MainFrame.CI_CREATE_TABLE));
+			popup.add(mainFrm.createMenuItem(MainFrame.CI_OPEN_IN_BROWSER));
 		} else {
 			popup.add(mainFrm.createMenuItem(MainFrame.CI_RENAME_TABLE));
 			popup.add(mainFrm.createMenuItem(MainFrame.CI_DELETE_TABLE));
+			popup.addSeparator();
+			popup.add(mainFrm.createMenuItem(MainFrame.CI_ADD_COLUMN));
+			popup.add(mainFrm.createMenuItem(MainFrame.CI_DELETE_COLUMN));
 			popup.addSeparator();
 			popup.add(mainFrm.createMenuItem(MainFrame.CI_ADD_RECORD));
 		}
